@@ -26,5 +26,7 @@ WORKDIR ${APP_DIR}
 # what are the required ports
 EXPOSE ${PORT}
 
+HEALTHCHECK --interval=30s --timeout=30s --start-period=5s --retries=3 CMD curl http://localhost:${PORT}}/healthz || exit 1
+
 # run the app
 ENTRYPOINT [ "node", "main" ]

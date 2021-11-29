@@ -1,0 +1,27 @@
+#create network
+docker network create appnet
+docker network ls
+
+#create volume
+docker volume create db-vol
+
+#create the northwind-db:v1 database into appnet
+docker run -d --name nwdb \
+    --network appnet \
+    -v db-vol:/var/lib/mysql \
+    stackupiss/northwind-db:v1
+
+#create the northwind-app:v1 app into appnet
+docker run -d --name nwapp \
+    --network appnet \
+    -p 8080:3000
+    -e DB_HOST=nwdb \
+    -e DB_USER=root \
+    -e DB_PASSWORD=changeit \
+    stackupiss/northwind-app:v1
+
+#check for nslookup
+docker run -ti --name abc --network appnet gcr.io/kubernetes-e2e-test-images/dnsutils:1.3
+nslookup nwapp
+
+
