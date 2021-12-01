@@ -1,0 +1,29 @@
+apiVersion: v1
+kind: Pod
+metadata:
+  name: dov-pod
+  labels:
+    name: dov-pod
+    app: dov
+    tier: backend
+  annotations:
+    cost-center: ac123
+spec:
+  containers:
+  - name: myapp
+    image: stackupiss/dov-bear:v2
+    imagePullPolicy: IfNotPresent
+    resources:
+      limits:
+        memory: "128Mi"
+        cpu: "500m"
+    ports:
+      - containerPort: 3000
+    env:
+      - name: INSTANCE_NAME
+        value: dov-bear
+      - name: INSTANCE_HASH
+        valueFrom:
+          fieldRef:
+            fieldPath: metadata.annotations['cost-center']
+
