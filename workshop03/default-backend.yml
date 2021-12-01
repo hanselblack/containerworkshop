@@ -1,0 +1,38 @@
+---
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  labels:
+    app: default-backend-deploy
+  name: default-backend-deploy
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: default-backend-pod
+  template:
+    metadata:
+      labels:
+        app: default-backend-pod
+    spec:
+      containers:
+      - image: stackupiss/default-backend:v2
+        name: default-backend-pod
+        ports:
+        - containerPort: 3000
+---
+apiVersion: v1
+kind: Service
+metadata:
+  labels:
+    app: default-backend-svc
+  name: default-backend-svc
+spec:
+  selector:
+    app: default-backend-pod
+  type: ClusterIP
+  ports:
+  - name: 3000-3000
+    port: 3000
+    protocol: TCP
+    targetPort: 3000

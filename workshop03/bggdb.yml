@@ -1,0 +1,48 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: bggdb-deploy
+  namespace: bggns
+spec:
+  selector:
+    matchLabels:
+      name: bggdb
+  template:
+    metadata:
+      labels:
+        name: bggdb
+    spec:
+      volumes:
+      - name: bggdb-vol
+        persistentVolumeClaim:
+          claimName: bggdb-pvc
+      containers:
+      - name: bggdb-container
+        image: stackupiss/bgg-database:v1
+        imagePullPolicy: IfNotPresent
+        ports:
+        - containerPort: 3306
+        resources:
+            limits:
+              memory: "500Mi"
+              cpu: "500m"
+        volumeMounts:
+        - name: bggdb-vol
+          mountPath: /var/lib/mysql 
+        envFrom:
+          - configMapRef:
+              name: bgg-cm
+          - secretRef:
+              name: bgg-secret
+---
+apiVersion: v1
+kind: Service
+metadata:
+  name: bggdb-svc
+  namespace: bggns
+spec:
+  selector:
+    name: bggdb
+  ports:
+  - port: 3306
+    targetPort: 3306

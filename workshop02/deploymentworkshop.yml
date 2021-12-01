@@ -53,7 +53,7 @@ spec:
         image: stackupiss/bgg-backend:v2
         imagePullPolicy: IfNotPresent
         ports:
-        - containerPort: 3306
+        - containerPort: 3
         envFrom:
           - configMapRef:
               name: bgg-cm

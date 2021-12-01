@@ -1,0 +1,9 @@
+apiVersion: v1
+data:
+  INSTANCE_HASH: "123"
+  INSTANCE_NAME: dov
+kind: ConfigMap
+metadata:
+  creationTimestamp: null
+  name: dov-cm
+  namespace: dovns
