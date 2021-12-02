@@ -1,0 +1,20 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: dov-cm
+  labels:
+    name: dov-cm
+data:
+  INSTANCE_NAME: dov-cm
+  INSTANCE_HASH: from-configmap
+---
+apiVersion: v1
+kind: Secret
+metadata:
+  name: dov-secret
+  labels:
+    name: dov-secret
+type: Opaque
+data:
+  INSTANCE_NAME: ZG92LWNt
+  INSTANCE_HASH: ZnJvbS1zZWNyZXQ=

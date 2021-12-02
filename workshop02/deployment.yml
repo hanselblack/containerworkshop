@@ -1,0 +1,57 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: dov-deploy
+  labels:
+    name: dov-deploy
+spec:
+  replicas: 2
+  selector:
+    matchLabels:
+      name: dov-pod
+  template:
+    metadata:
+      name: dov-pod
+      labels:
+        name: dov-pod
+        version: V1
+    spec:
+      containers:
+        - name: myapp
+          image: stackupiss/dov-bear:v2
+          imagePullPolicy: IfNotPresent
+          resources:
+            limits:
+              memory: "128Mi"
+              cpu: "500m"
+          ports:
+            - containerPort: 3000
+          envFrom:
+            - configMapRef:
+                name: dov-cm
+          #env:      
+          # - name: INSTANCE_NAME
+          #   value: dov-bear
+          # - name: INSTANCE_HASH
+          #   valueFrom:
+          #     fieldRef:
+          #       fieldPath: status.podIP
+---
+
+apiVersion: v1
+kind: Service
+metadata:
+  name: dov-svc
+  labels:
+    name: dov-svc
+spec:
+  # type: NodePort
+  type: ClusterIP
+  # type: LoadBalancer
+  selector:
+    name: dov-pod
+    # version: v1
+  ports:
+  - name: dov-svc-port
+    port: 80
+    targetPort: 3000
