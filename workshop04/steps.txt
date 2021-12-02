@@ -1,0 +1,5 @@
+1) Generate a RSA private key (Thats the private key)
+openssl genrsa -out dov.key 2048
+
+2) Proper - to generate CSR
+openssl req -new -key dov.key -out dov.csr -subj '/CN=dov
